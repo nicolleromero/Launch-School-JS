@@ -8,10 +8,8 @@ const switchPasses = (allLights, switches) => {
 }
 
 const changeLightsPass = (allLights, switches, factor) => {
-  for (let key = 1; key <= switches; key++) {
-    if (key % factor === 0) {
-      allLights[key] = !allLights[key];
-    }
+  for (let key = factor; key <= switches; key += factor) {
+    allLights[key] = !allLights[key];
   }
   return allLights;
 }
@@ -20,7 +18,7 @@ const buildArray = (allLights, switches) => {
   let arr = [];
   for (let i = 1; i <= switches; i++) {
     if (allLights[i]) {
-    arr.push(i); 
+      arr.push(i); 
     }
   }
   return arr;
@@ -35,3 +33,4 @@ const lightsOn = (switches) => {
 }
 
 console.log(lightsOn(100));
+

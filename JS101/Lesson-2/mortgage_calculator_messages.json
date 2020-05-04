@@ -1,0 +1,16 @@
+{
+
+  "welcome": "Welcome to Mortgage Calculator!",
+  "loan_amount": "What is the loan amount?",
+  "apr": "What's the Annual Percentage Rate (APR)?",
+  "example_apr": "Example: 5 for 5% or 2.5 for 2.5%.",
+  "duration": "What's the length of the loan in years?",
+  "not_right": "Hmm... that doesn't look like a valid number.",
+  "result": "The result is:",
+  "another_calculation": "Would you like to make another calculation?",
+  "must_be_y_or_n": "Please enter \"y\" or \"n\".",
+  "must_be_positive": "You must enter a positive number.",
+  "all_due": "The full amount of $AMOUNT is now due.",
+  "monthly_payment": "Your monthly payment is: $PAYMENT"
+
+}

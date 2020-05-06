@@ -3,46 +3,51 @@ const readline = require('readline-sync');
 
 /* Mortgage Calculator */
 
-function calculateMortgage() {
-  prompt(MESSAGES['welcome']);
-  while (true) {
-    monthlyPayment(getAmount(), getApr(), getDuration());
 
-    prompt(MESSAGES['another_calculation']);
-    let answer = readline.question().toLowerCase();
-    while (answer[0] !== 'n' && answer[0] !== 'y') {
-      prompt(MESSAGES['must_be_y_or_n']);
-      answer = readline.question().toLowerCase();
-    }
-    if (answer[0] === 'n') break;
+prompt(MESSAGES['welcome']);
+while (true) {
+  let amount = getInput("amount", getValidLoanAmount);
+  let apr = getInput("apr", getValidApr);
+  let duration = getInput("duration", getValidDuration);
+  let finalMonthlyPayment = monthlyPayment(amount, apr, duration);
+  if (finalMonthlyPayment !== null) {
+    displayMonthlyPayment(finalMonthlyPayment);
   }
+  prompt(MESSAGES['another_calculation']);
+  prompt(MESSAGES['must_be_yes_or_no']);
+  let answer = readline.question().toLowerCase();
+  while (answer !== 'no' && answer !== 'yes') {
+    prompt(MESSAGES['must_be_yes_or_no']);
+    answer = readline.question().toLowerCase();
+  }
+  if (answer === 'no') break;
+  console.clear();
 }
+
 
 function prompt(message) {
   console.log(`=> ${message}`);
 }
 
+function getInput(inputType, validInput) {
+  prompt(MESSAGES[inputType]);
+  prompt(MESSAGES[`example_${inputType}`]);
+  let input = readline.question();
+
+  while (validInput(input) === null) {
+    prompt(MESSAGES['must_be_positive']);
+    input = readline.question();
+  }
+  return validInput(input);
+}
+
 function getValidLoanAmount(number) {
   let match = number.match(/^\$?([\d,]+(\.\d\d)?)$/);
-  if (match === null) {
+  if (match === null || number === '0') {
     return null;
   } else {
     return Number(match[1].replace(/,/g, ''));
   }
-}
-
-function getAmount() {
-  prompt(MESSAGES['loan_amount']);
-  let amountInput = readline.question();
-  let amount = getValidLoanAmount(amountInput);
-
-  while (amount === null) {
-    prompt(MESSAGES['must_be_positive']);
-    amountInput = readline.question();
-    amount = getValidLoanAmount(amountInput);
-  }
-
-  return amount;
 }
 
 function getValidApr(aprInput) {
@@ -54,51 +59,36 @@ function getValidApr(aprInput) {
   }
 }
 
-function getApr() {
-  prompt(MESSAGES['apr']);
-  prompt(MESSAGES['example_apr']);
-  let aprInput = readline.question();
-  let apr = getValidApr(aprInput);
-
-  while (apr === null) {
-    prompt(MESSAGES['must_be_positive']);
-    aprInput = readline.question();
-    apr = getValidApr(aprInput);
-  }
-
-  return apr;
-}
-
-function getDuration() {
-  prompt(MESSAGES['duration']);
-  let years = readline.question();
+function getValidDuration(duration) {
+  let years = duration;
   let months;
-  if (years === '0') {
-    months = 0;
+  if (years < '0' || years === null || Number.isNaN(Number(years))) {
+    return null;
   } else {
-    while (years < 0 || years === null || Number.isNaN(Number(years))) {
-      prompt(MESSAGES['must_be_positive']);
-      years = readline.question();
-    }
     months = Number(years * 12);
   }
   return months;
 }
 
 function monthlyPayment(amount, apr, months) {
+  let finalMonthlyPayment;
   if (months === 0) {
     prompt(MESSAGES['all_due'].replace('AMOUNT', amount));
+    return null;
   } else if (apr === 0) {
     let monthlyPaymentZero = (amount / months).toFixed(2);
     prompt(MESSAGES['monthly_payment'].replace('PAYMENT', monthlyPaymentZero));
+    return null;
   } else {
     let monthlyIntRate = apr / 12;
     let monthlyAmount = amount * monthlyIntRate;
     let monthlyPayment =
       monthlyAmount / (1 - Math.pow(1 + monthlyIntRate, -months));
-    let finalMonthlyPayment = monthlyPayment.toFixed(2);
-    prompt(MESSAGES['monthly_payment'].replace('PAYMENT', finalMonthlyPayment));
+    finalMonthlyPayment = monthlyPayment.toFixed(2);
+    return finalMonthlyPayment;
   }
 }
 
-calculateMortgage();
+function displayMonthlyPayment(finalMonthlyPayment) {
+  prompt(MESSAGES['monthly_payment'].replace('PAYMENT', finalMonthlyPayment));
+}

@@ -5,6 +5,7 @@
   "author": "Nicolle Romero",
   "main": "index.js",
   "dependencies": {
+    "chalk": "^4.0.0",
     "readline-sync": "^1.4.10"
   },
   "devDependencies": {

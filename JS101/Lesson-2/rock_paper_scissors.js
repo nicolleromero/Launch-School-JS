@@ -18,15 +18,40 @@ const WINNING_COMBOS = {
   spock:    ['rock',     'scissors'],
 };
 
+
 function prompt(message) {
   console.log(`=> ${message}`);
 }
 
 function oneGamePlay() {
-  let choice = promptShortChoice();
+  displayPrompt();
+  let choice = readline.question().toLowerCase();
+  choice = setInputVariable(choice);
+  validateInput(choice);
+  return choice;
+}
+
+function displayPrompt() {
+  prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
+  prompt("Enter the first letter of your selection.");
+  prompt("Enter 'sc' for 'scissors' and 'sp' for 'spock'.)");
+}
+
+function setInputVariable (choice) {
+  for (let option of VALID_CHOICES) {
+    if (option[0] === choice && choice !== 's') { //Made this more flexible for the user
+      choice = option;
+    } else if (option[1] === choice[1]) {
+      choice = option;
+    }
+  }
+  return choice;
+}
+
+function validateInput(choice) {
   while (!VALID_CHOICES.includes(choice)) {
     prompt("That's not a valid choice.");
-    choice = promptShortChoice();
+    choice = setInputVariable(choice);
   }
   return choice;
 }
@@ -55,7 +80,7 @@ function displayWinner(outcome) {
   }
 }
 
-function bestOfFive(winCount, loseCount) {
+function displayMatchWinner(winCount, loseCount) {
   if (winCount === 3 || loseCount === 3) {
     if (winCount > loseCount) {
       console.log('--------------------------------------------------------');
@@ -67,31 +92,15 @@ function bestOfFive(winCount, loseCount) {
   console.log(`Your best of five score is: ${winCount} to ${loseCount}`);
 }
 
-function promptShortChoice() {
-  prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
-  prompt("Enter the first letter of your selection.");
-  prompt("Enter 'sc' for 'scissors' and 'sp' for 'spock'.)");
-  let choice = readline.question().toLowerCase();
-
-  for (let option of VALID_CHOICES) {
-    if (option[0] === choice && choice !== 's') { //Made this more flexible for the user
-      choice = option;
-    } else if (option[1] === choice[1]) {
-      choice = option;
-    }
-  }
-  return choice;
-}
-
 function playGame() {
   let winCount = 0;
   let loseCount = 0;
-
+  console.clear();
   while (winCount < 3 && loseCount < 3) {
     let gameCount = winCount + loseCount + 1;
-    console.log(`-----------------Game ${gameCount} of the match----------------\n`);
-    let choice = oneGamePlay();
+    console.log(`\n\n---------------Game ${gameCount} of the match----------------\n`);
 
+    let choice = oneGamePlay();
     let randomIndex = Math.ceil(Math.random() * VALID_CHOICES.length) - 1;
     let computerChoice = VALID_CHOICES[randomIndex];
     let outcome = playerWinsLogic(choice, computerChoice);
@@ -101,24 +110,26 @@ function playGame() {
 
     winCount += outcome === 'win' ? 1 : 0;
     loseCount += outcome === 'lose' ? 1 : 0;
-    bestOfFive(winCount, loseCount);
+    displayMatchWinner(winCount, loseCount);
   }
 }
 
+function willPlayAgain() {
+  let playAgain = readline.question().toLowerCase();
+  while (playAgain !== 'no' && playAgain !== 'yes') {
+    prompt('Please enter "yes" or "no".');
+    playAgain = readline.question().toLowerCase();
+  }
+  if (playAgain === 'yes') {
+    console.clear();
+    return 'yes';
+  } else {
+    return 'no';
+  }
+}
 
-let answer = 'yes';
-while (answer === 'yes') {
+while (true) {
   playGame();
   prompt('Do you want to play again (yes/no)?');
-  answer = readline.question().toLowerCase();
-  while (answer !== 'no' && answer !== 'yes') {
-    prompt('Please enter "yes" or "no".');
-    answer = readline.question().toLowerCase();
-  }
-  if (answer === 'yes') {
-    console.clear();
-    continue;
-  } else {
-    break;
-  }
+  if (willPlayAgain() === 'no') break;
 }

@@ -27,8 +27,7 @@ function oneGamePlay() {
   displayPrompt();
   let choice = readline.question().toLowerCase();
   choice = setInputVariable(choice);
-  validateInput(choice);
-  return choice;
+  return validateInput(choice);
 }
 
 function displayPrompt() {
@@ -51,6 +50,7 @@ function setInputVariable (choice) {
 function validateInput(choice) {
   while (!VALID_CHOICES.includes(choice)) {
     prompt("That's not a valid choice.");
+    choice = readline.question().toLowerCase();
     choice = setInputVariable(choice);
   }
   return choice;
@@ -89,29 +89,43 @@ function displayMatchWinner(winCount, loseCount) {
       console.log(chalk.red('The computer won best of five!'));
     }
   }
-  console.log(`Your best of five score is: ${winCount} to ${loseCount}`);
 }
 
 function playGame() {
   let winCount = 0;
   let loseCount = 0;
   console.clear();
+  let outcome;
   while (winCount < 3 && loseCount < 3) {
-    let gameCount = winCount + loseCount + 1;
-    console.log(`\n\n---------------Game ${gameCount} of the match----------------\n`);
-
-    let choice = oneGamePlay();
-    let randomIndex = Math.ceil(Math.random() * VALID_CHOICES.length) - 1;
-    let computerChoice = VALID_CHOICES[randomIndex];
-    let outcome = playerWinsLogic(choice, computerChoice);
-
-    displayChoices(choice, computerChoice);
-    displayWinner(outcome);
-
+    outcome = matchNotWon(winCount, loseCount);
     winCount += outcome === 'win' ? 1 : 0;
     loseCount += outcome === 'lose' ? 1 : 0;
-    displayMatchWinner(winCount, loseCount);
+    console.log(`Your best of five score is: ${winCount} to ${loseCount}`);
   }
+  displayMatchWinner(winCount, loseCount);
+}
+
+function matchNotWon (winCount, loseCount) {
+  let gameCount = winCount + loseCount + 1;
+  console.log(`\n\n---------------Game ${gameCount} of the match----------------\n`);
+
+  let choice = oneGamePlay();
+  let computerChoice = getComputerMove();
+  let outcome = playerWinsLogic(choice, computerChoice);
+  displayGameOutcome(outcome, choice, computerChoice);
+  return outcome;
+}
+
+function displayGameOutcome(outcome, choice, computerChoice) {
+  displayChoices(choice, computerChoice);
+  displayWinner(outcome);
+  return outcome;
+}
+
+function getComputerMove() {
+  let randomIndex = Math.ceil(Math.random() * VALID_CHOICES.length) - 1;
+  let computerChoice = VALID_CHOICES[randomIndex];
+  return computerChoice;
 }
 
 function willPlayAgain() {

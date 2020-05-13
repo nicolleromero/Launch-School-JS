@@ -45,12 +45,39 @@
 //   });
 // }
 
-function fibonacciNumber(nth) {
-  if (nth <= 1) {
-    return nth;
-  } else {
-    return fibonacciNumber(nth - 1) + fibonacciNumber(nth - 2);
+// function fibonacciNumber(nth) {
+//   if (nth <= 1) {
+//     return nth;
+//   } else {
+//     return fibonacciNumber(nth - 1) + fibonacciNumber(nth - 2);
+//   }
+// }
+
+// console.log(fibonacciNumber(process.argv[2]));
+
+// function fibonacciNumber2(nth) {
+//   if (nth <= 1) {
+//     return nth;
+//   }
+//   let lastOne = 0;
+//   let lastTwo = 1;
+//   for (let i = 2; i <= nth; i++) {
+//     let sum = lastOne + lastTwo;
+//     lastOne = lastTwo;
+//     lastTwo = sum;
+//   }
+//   return lastTwo;
+// }
+
+// 0 1 2 3 5 8 13 21 _
+
+let advice = "Few things in life are as important as house training your pet dinosaur important.";
+
+function sample(advice) {
+  while (advice.includes('important')) {
+    advice = advice.replace('important', 'urgent');
   }
+  return advice;
 }
 
-console.log(fibonacciNumber(process.argv[2]));
+console.log(sample(advice));

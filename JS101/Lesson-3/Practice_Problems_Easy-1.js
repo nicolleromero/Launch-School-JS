@@ -38,12 +38,5 @@
 let munstersDescription = "the Munsters are CREEPY and Spooky.";
 // => The munsters are creepy and spooky.
 
-// function changeCap(string) {
-//   let newString = string.toLowerCase();
-//   newString.charAt(0).toUpperCase();
-//   console.log(newString.charAt(0));
-//   return newString;
-
-// }
-console.log(munstersDescription.charAt(0).toUpperCase() +
-munstersDescription.substring(1).toLowerCase());
+munstersDescription.charAt(0).toUpperCase() +
+munstersDescription.substring(1).toLowerCase())

@@ -9,9 +9,7 @@ function maxRotation(number) {
   return Number(stringNum);
 }
 
-function rotateRightmostDigits(number, count) {
-  let stringNum = number + "";
-  let startIndex = count;
+function rotateRightmostDigits(stringNum, startIndex) {
   let numToMove = stringNum.slice(startIndex);
   let substring = stringNum.substring(0, startIndex);
   console.log(substring + rotateString(numToMove));

@@ -10,20 +10,14 @@
 function maxSequence (arr) {
   if (arr.length < 1) {
     return 0;
-  } else if (arr.length === 1) {
-    if (arr[0] > 0) {
-      return arr[0];
-    } else {
-      return 0;
-    }
+  } else if (arr.length === 1 && arr[0] > 0) {
+    return arr[0];
   }
-
   if (arr.every((x => x < 0))) {
     return 0;
   }
 
   let finalSum = 0;
-
   for (let i = 0; i < arr.length; i++) {
     for (let j = 1; j < arr.length; j++) {
       let candidate = arr.slice(i, j + 1);

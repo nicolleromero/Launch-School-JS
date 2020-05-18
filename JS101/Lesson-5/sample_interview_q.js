@@ -1,4 +1,4 @@
-/* eslint-disable max-lines-per-function */
+
 //The maximum sum subarray problem consists in finding the maximum sum of a contiguous subsequence in an array of integers:
 
 //maxSequence [-2, 1, -3, 4, -1, 2, 1, -5, 4]
@@ -8,21 +8,13 @@
 //Empty array is considered to have zero greatest sum. Note that the empty array is also a valid subarray.
 
 function maxSequence (arr) {
-  if (arr.length < 1) {
-    return 0;
-  } else if (arr.length === 1 && arr[0] > 0) {
-    return arr[0];
-  }
-  if (arr.every((x => x < 0))) {
-    return 0;
-  }
-
   let finalSum = 0;
   for (let i = 0; i < arr.length; i++) {
-    for (let j = 1; j < arr.length; j++) {
+    for (let j = i; j < arr.length; j++) {
       let candidate = arr.slice(i, j + 1);
-      if (candidate.reduce((a, b) => a + b, 0) > finalSum) {
-        finalSum = candidate.reduce((a, b) => a + b, 0);
+      let sum = candidate.reduce((a, b) => a + b, 0);
+      if (sum > finalSum) {
+        finalSum = sum;
         console.log(finalSum);
       }
     }

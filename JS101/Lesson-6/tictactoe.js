@@ -163,14 +163,10 @@ function computerRandomPick(board) {
 }
 
 function computerChoosesSquare(board) {
-  let square = null;
-  if (!square) {
-    square = computerDefense(board);
-  } else if (!square) {
-    square = computerOffense(board);
-  } else {
-    square = nextbestOffense(board);
-  }
+  let square =
+    computerOffense(board) ||
+    computerDefense(board) ||
+    nextbestOffense(board);
 
   if (!square) {
     if (emptySquares(board).includes('5')) {

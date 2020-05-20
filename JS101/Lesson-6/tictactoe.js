@@ -4,6 +4,7 @@ const readline = require('readline-sync');
 const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
+const MATCH_COUNT = 5;
 
 
 const WINNING_LINES = [
@@ -39,6 +40,7 @@ function validateFirstPlayerInput(answer) {
 }
 
 function displayBoard(board) {
+  console.clear();
   console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}`);
 
   console.log('');
@@ -223,7 +225,12 @@ function displayWinner(outcome) {
   }
 }
 
+function displayGameCount(gameCount) {
+  console.log(`\n\n---------------Game ${gameCount} of the match----------------\n`);
+}
+
 function oneGamePlay(firstPlayer) {
+
   let board = initializeBoard();
 
   if (!firstPlayer) {
@@ -249,40 +256,44 @@ function oneGamePlay(firstPlayer) {
 }
 
 // eslint-disable-next-line no-inner-declarations
-function displayMatchWinner(winCount, loseCount) {
-  if (winCount === 5 || loseCount === 5) {
-    if (winCount > loseCount) {
+function displayMatchWinner(playerScore, computerScore) {
+  if (playerScore === MATCH_COUNT || computerScore === MATCH_COUNT) {
+    if (playerScore > computerScore) {
       console.log('--------------------------------------------------------');
       console.log(chalk.green('\nYou won best of five!'));
-    } else if (winCount < loseCount) {
+    } else if (playerScore < computerScore) {
       console.log(chalk.red('The computer won best of five!'));
     }
   }
 }
 
 function playGame() {
-  let winCount = 0;
-  let loseCount = 0;
+  let playerScore = 0;
+  let computerScore = 0;
   let outcome;
   let gameCount = 1;
-  while (winCount < 5 && loseCount < 5) {
-    outcome = matchNotWon(gameCount);
-    gameCount += 1;
-    winCount += outcome === 'Player' ? 1 : 0;
-    loseCount += outcome === 'Computer' ? 1 : 0;
-    console.log(`\n\nYour best of five score is: ${winCount} to ${loseCount}`);
-  }
-  displayMatchWinner(winCount, loseCount);
+  updateScore(playerScore, computerScore, outcome, gameCount);
+  displayMatchWinner(playerScore, computerScore);
 }
 
-function matchNotWon(gameCount) {
-  console.log(`\n\n---------------Game ${gameCount} of the match----------------\n`);
+function updateScore(playerScore, computerScore, outcome, gameCount) {
+  while (playerScore < MATCH_COUNT && computerScore < MATCH_COUNT) {
+    outcome = continuePlay(gameCount);
+    gameCount += 1;
+    playerScore += outcome === 'Player' ? 1 : 0;
+    computerScore += outcome === 'Computer' ? 1 : 0;
+    console.log(`\n\nYour best of five score is: ${playerScore} to ${computerScore}`);
+  }
+}
 
-  let outcome = oneGamePlay();
+function continuePlay(gameCount, firstPlayer) {
+  displayGameCount(gameCount);
+  let outcome = oneGamePlay(firstPlayer);
   return outcome;
 }
 
-function willPlayAgain() {
+function willNotPlayAgain() {
+  prompt('Do you want to play again (yes/no)?');
   let playAgain = readline.question().toLowerCase();
   while (playAgain !== 'no' && playAgain !== 'yes') {
     prompt('Please enter "yes" or "no".');
@@ -290,16 +301,15 @@ function willPlayAgain() {
   }
   if (playAgain === 'yes') {
     console.clear();
-    return 'yes';
+    return true;
   } else {
-    return 'no';
+    return false;
   }
 }
 
 while (true) {
   playGame();
-  prompt('Do you want to play again (yes/no)?');
-  if (willPlayAgain() === 'no') {
+  if (willNotPlayAgain()) {
     prompt('Thanks for playing Tic Tac Toe!');
     break;
   }

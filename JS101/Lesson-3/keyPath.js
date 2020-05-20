@@ -39,6 +39,7 @@ function getValue(item, keyPath) {
   }
   if (typeof item === 'object' && item !== null) {
     let key = keyPath[0];
+    console.log(key);
     item = item[key];
     keyPath = keyPath.slice(1);
     return getValue(item, keyPath);
@@ -48,13 +49,16 @@ function getValue(item, keyPath) {
 }
 
 function getKeyPath(item, target) {
+  let result = '';
   if (item === target) {
     return [];
   }
   if (Array.isArray(item)) {
-    let result = traverseArray(item, getKeyPath, target);
+    let item = traverseArray(item, getKeyPath, target);
   //send back through recursively if not an endpoint
-  } else if (typeof branch === 'object' && branch !== null) {
+  } else if (typeof item === 'object' && item !== null) {
+    // return [index].concat(result);
+    return getKeyPath();
   //check through object
   //send back through recursively if not an endpoint
   } else {
@@ -68,6 +72,7 @@ function getKeyPath(item, target) {
 function traverseArray(arr, func, target) {
   for (let index = 0; index < arr.length; index++) {
     if (arr[index] === target) {
+      console.log(index);
       return [index];
     } else {
       let result = func(arr[index], target); // ['a']
@@ -84,8 +89,9 @@ function traverseArray(arr, func, target) {
 // let keyPath = [0, 'a', 'cat', 'food', 1];
 // let keyPath = [0, 'b'];
 // let keyPath = [3, 'love', 0];
-let keyPath = [3, 'you', 0, 0];
+// let keyPath = [3, 'you', 0, 0];
 
-console.log(getValue(testCase, keyPath));
+// console.log(getKeyPath(testCase, 'green'));
+console.log(traverseArray(testCase, getKeyPath(), 'green'));
 
-// For testCase key path, should return testCase[0]['a'][1] = 'green'
+// For testCase key path, should return testCase[0]['c'][1] = 'green'

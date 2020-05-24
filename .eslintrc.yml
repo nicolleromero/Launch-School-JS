@@ -53,9 +53,9 @@ rules:
     - SwitchCase: 1
   keyword-spacing: error
   linebreak-style: error
-  max-depth: error
+  max-depth: warn
   max-len:
-    - error
+    - warn
     - code: 80
       tabWidth: 2
       ignoreRegExpLiterals: false
@@ -64,15 +64,15 @@ rules:
       ignoreTrailingComments: true
       ignoreUrls: true
   max-lines-per-function:
-    - error
+    - warn
     - max: 20
       skipBlankLines: true
       skipComments: true
   max-nested-callbacks:
-    - error
+    - warn
     - max: 4
   max-statements:
-    - error
+    - warn
     - max: 15
     - ignoreTopLevelFunctions: true
   max-statements-per-line: error
@@ -182,4 +182,3 @@ rules:
     - words: true
       nonwords: false
   vars-on-top: error
-  

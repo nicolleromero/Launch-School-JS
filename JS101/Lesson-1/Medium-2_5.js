@@ -1,38 +1,32 @@
-/* eslint-disable max-statements */
-/* eslint-disable max-depth */
-/* eslint-disable max-lines-per-function */
+const MAX_NUM = 9876543201;
 
 function featured(num) {
-  const MAX_NUM = 9876543201;
-  if (num >= MAX_NUM) {
-    return "There is no possible number that fulfills those requirements.";
+  let closestNum = Math.ceil(num / 7) * 7;
+  if (closestNum === num) {
+    closestNum += 7;
   }
-  let closestNum = Math.ceil(num / 7);
-  if (closestNum * 7 === num) {
-    closestNum += 1;
+  if (closestNum % 2 === 0) {
+    closestNum += 7;
   }
 
-  while (true) {
-    for (let i = closestNum; i < MAX_NUM; i++) {
-      if ((i * 7) % 2 !== 0) {
-        let str = (i * 7).toString();
-        if (checkUnique(str)) {
-          return Number(str);
-        }
-      }
+  for (let i = closestNum; i <= MAX_NUM; i += 14) {
+    if (checkUnique(String(i))) {
+      return i;
     }
   }
+
+  return "There is no possible number that fulfills those requirements.";
 }
+
 
 function checkUnique(str) {
   for (let j = 0; j < str.length; j++) {
     let digit = str[j];
-    let check = str.slice(j + 1);
-    if (check.includes(digit)) {
-      return null;
+    if (str.includes(digit, j + 1)) {
+      return false;
     }
   }
-  return str;
+  return true;
 }
 
 

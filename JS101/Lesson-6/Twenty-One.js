@@ -3,7 +3,8 @@ const readline = require('readline-sync');
 
 // Heart = u2661, Diamond = u2662, Spade = u2664, Club = u2667
 const SUITS = [chalk.red('\u2661'), chalk.red('\u2662'), '\u2664', '\u2667'];
-const VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+const VALUES =
+['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
 function prompt(message) {
   console.log(`=> ${message}`);
@@ -35,7 +36,6 @@ function initalizeDeck() {
 }
 
 function total(cards) {
-  // cards = [{suit: 'H', value: '3', toString: ()}, {suit: 'S', value: 'Q', toString(): ()}, ... ]
   let values = cards.map((card) => card.value);
 
   let sum = 0;
@@ -207,9 +207,6 @@ while (true) {
   prompt(`Dealer has ${dealerCards[0]} and ?`);
   prompt(`You have: ${playerCards[0]} and ${playerCards[1]}, for a total of ${playerTotal}.`);
 
-  let matchScore = [0, 0];
-
-  // player turn
   playerTotal = playerTurn(playerCards, playerTotal, dealerTotal, deck);
 
   if (busted(playerTotal)) {
@@ -223,12 +220,7 @@ while (true) {
     } else {
       displayOutcome(dealerCards, dealerTotal, playerCards, playerTotal);
     }
-
   }
-  // updateMatchScore (matchScore);
-  // if (matchScore[0] === 5 || matchScore[1] === 5) {
-  //   displayMatchWinner (matchScore);
-  // }
 
   if (playAgain() === 'n') {
     console.clear();

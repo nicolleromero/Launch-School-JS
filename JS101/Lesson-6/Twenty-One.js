@@ -98,9 +98,9 @@ function displayResults(playerTotal, dealerTotal) {
 function playAgain() {
   console.log('-------------');
   let answer = null;
-  while (answer === null) {
-    prompt('Do you want to play again? (y or n)');
-    answer = readline.question().toLowerCase();
+  prompt('Do you want to play again? (y or n)');
+  answer = readline.question().toLowerCase();
+  while (answer !== 'y' && answer !== 'n') {
     if (!['y', 'n'].includes(answer)) {
       prompt("Sorry, must enter 'y' or 'n'.");
       answer = readline.question().toLowerCase();
@@ -110,7 +110,7 @@ function playAgain() {
 
 }
 
-function popTwoFromDeck(deck) {
+function dealTwoCards(deck) {
   return [deck.pop(), deck.pop()];
 }
 
@@ -119,8 +119,8 @@ function hand(cards) {
 }
 
 function dealCards(deck, playerCards, dealerCards) {
-  playerCards.push(...popTwoFromDeck(deck));
-  dealerCards.push(...popTwoFromDeck(deck));
+  playerCards.push(...dealTwoCards(deck));
+  dealerCards.push(...dealTwoCards(deck));
 }
 
 function playerHitOrStay() {
@@ -149,23 +149,27 @@ function playerTurn(playerCards, playerTotal, dealerTotal, deck) {
     }
     let playerChoice = playerHitOrStay();
     if (playerChoice === 'h') {
-      playerTotal = playerHits(playerCards, deck);
+      playerHits(playerCards, deck);
+      playerTotal = calculateCurrentTotal(playerCards, 'player');
     }
-    if (playerChoice === 's' || busted(playerTotal)) {
-      break;
-    }
+    if (playerChoice === 's' || busted(playerTotal)) break;
   }
   return playerTotal;
 }
 
 function playerHits(playerCards, deck) {
   playerCards.push(deck.pop());
-  let playerTotal = total(playerCards);
   prompt('You chose to hit!');
   prompt(`Your cards are now: ${hand(playerCards)}`);
-  prompt(`Your total is now: ${playerTotal}`);
+}
 
-  return playerTotal;
+function calculateCurrentTotal(cards, role) {
+  let currentTotal = total(cards);
+  if (role === 'player') {
+    prompt(`Your total is now: ${currentTotal}`);
+  }
+
+  return currentTotal;
 }
 
 function dealerTurn(dealerTotal, dealerCards, deck) {

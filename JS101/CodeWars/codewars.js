@@ -22,30 +22,30 @@
 
 // console.log(cakes(recipe, available));
 
-// function getPrimes(max) {
-//   if (max < 2) {
-//     return [];
-//   }
+function getPrimes(max) {
+  if (max < 2) {
+    return [];
+  }
 
-//   const primes = [2];
+  const primes = [2];
 
-//   for (let num = 3; num <= max; num += 2) {
-//     let isPrime = true;
+  for (let num = 3; num <= max; num += 2) {
+    let isPrime = true;
 
-//     for (let prime of primes) {
-//       if (num % prime === 0) {
-//         isPrime = false;
-//         break;
-//       }
-//     }
+    for (let prime of primes) {
+      if (num % prime === 0) {
+        isPrime = false;
+        break;
+      }
+    }
 
-//     if (isPrime) {
-//       primes.push(num);
-//     }
-//   }
+    if (isPrime) {
+      primes.push(num);
+    }
+  }
 
-//   return primes;
-// }
+  return primes;
+}
 
 // function sumOfDivided(lst) {
 //   let P = [];
